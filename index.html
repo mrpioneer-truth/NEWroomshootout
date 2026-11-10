@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#0d0f0d">
+<title>NEW방 ONLINE</title>
+<link rel="stylesheet" href="style.css?v=20261111a">
+</head>
+<body>
+<canvas id="view" aria-label="게임 화면"></canvas>
+
+<div id="hud" hidden>
+  <div class="vf" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+  <div id="topL"><span class="rec">● REC</span> <span id="tc">00:00:00:00</span> <span id="mode" class="chip"></span> <span id="netTag" class="chip net-tag" hidden></span></div>
+  <div id="topC"><span id="obj"></span><span id="ruleTag"></span></div>
+  <div id="topR"><span id="expo"></span><span class="battwrap"><span id="batt" data-v="4"><i></i><i></i><i></i><i></i></span><b id="hpText"></b></span></div>
+  <div id="party"></div>
+  <canvas id="mini" width="150" height="120"></canvas>
+  <div id="af"><i></i><i></i><i></i><i></i><b></b></div>
+  <div id="hitm">✕</div>
+  <div id="tags"></div>
+  <div id="bossbar" hidden><span>방문자</span><i><u></u></i></div>
+  <div id="banner" class="pop"></div>
+  <div id="rulebox" class="pop"></div>
+  <div id="lvlup" class="pop"></div>
+  <div id="subline" class="pop"></div>
+  <div id="whisper" aria-live="off"></div>
+  <div id="toast" class="pop"></div>
+  <div id="choice" hidden></div>
+  <div id="chat"></div>
+  <div id="bottomR">
+    <div id="skillBox"><i id="skillCd"></i><b>Q</b><span id="skillName"></span></div>
+    <div id="weap"><span id="wname"></span><b id="ammo"></b></div>
+  </div>
+  <div id="xp"><i id="xpFill"></i><span id="lvl">LV 1</span></div>
+  <div id="dead" hidden>신호 끊김 · 재접속 중…</div>
+  <button type="button" id="rangeExit" hidden>총 선택으로 돌아가기 · Esc</button>
+</div>
+
+<div id="touch" hidden>
+  <div id="stick"><i></i></div>
+  <button data-k="fire" class="t-fire">사격</button>
+  <button data-k="aim" class="t-aim">줌</button>
+  <button data-k="jump" class="t-jump">점프</button>
+  <button data-k="skill" class="t-skill">Q</button>
+  <button data-k="view" class="t-view">시점</button>
+</div>
+
+<div id="menu">
+  <div id="langPick" class="lang-in">
+    <div class="rec-line"><span class="rec">● REC</span><span>TAPE 06</span></div>
+    <h1>NEW방 <span>ONLINE</span></h1>
+    <p class="lang-q">언어 · Language · 言語</p>
+    <div class="lang-btns" role="group" aria-label="언어 선택">
+      <button type="button" data-lang="ko">한국어</button>
+      <button type="button" data-lang="en">English</button>
+      <button type="button" data-lang="ja">日本語</button>
+    </div>
+    <small class="lang-note">헤드폰 권장 · Headphones recommended · ヘッドホン推奨</small>
+  </div>
+  <div id="modePick" class="lang-in" hidden>
+    <div class="rec-line"><span class="rec">● REC</span><span>TAPE 06</span></div>
+    <h1>NEW방 <span>ONLINE</span></h1>
+    <p class="lang-q">접속 방식</p>
+    <div class="lang-btns">
+      <button type="button" data-mode="solo">혼자 하기</button>
+      <button type="button" data-mode="coop">협동 방 만들기</button>
+      <button type="button" data-mode="pvp">대전 방 만들기</button>
+    </div>
+    <form id="joinForm" class="join-row" autocomplete="off">
+      <input id="joinCode" maxlength="5" placeholder="방 코드" aria-label="방 코드" spellcheck="false" autocapitalize="characters">
+      <button type="submit">참가</button>
+    </form>
+    <small id="modeMsg" class="lang-note" role="status"></small>
+  </div>
+  <div id="gunPick" class="gun-in" hidden>
+    <header class="menu-head">
+      <div class="rec-line"><span class="rec">● REC</span><span>TAPE 06</span></div>
+      <h2 class="gun-title">총 · 능력 선택</h2>
+      <p id="gunWho" class="net-info"></p>
+    </header>
+    <h3 class="pick-label">총</h3>
+    <div id="guns" class="gun-grid" role="radiogroup" aria-label="총 선택"></div>
+    <h3 class="pick-label">Q 능력</h3>
+    <div id="skills" class="skill-grid" role="radiogroup" aria-label="Q 능력 선택"></div>
+    <div class="gun-actions">
+      <button type="button" id="gunBack">← 인물 다시 고르기</button>
+      <button type="button" id="gunTest">시험 사격</button>
+      <button type="button" id="gunGo" class="primary">입장</button>
+    </div>
+    <small id="gunMsg" class="lang-note" role="status"></small>
+  </div>
+  <div class="menu-in" hidden>
+    <header class="menu-head">
+      <div class="rec-line"><span class="rec">● REC</span><span>TAPE 06</span></div>
+      <h1>NEW방 <span>ONLINE</span></h1>
+      <p id="netInfo" class="net-info" hidden></p>
+    </header>
+    <div class="char-dial">
+      <div id="pickDetail" aria-hidden="true">
+        <i></i><b id="pickTitle">인물 선택</b><small id="pickHint">겉모습</small>
+      </div>
+      <div id="chars" role="group" aria-label="인물 선택"></div>
+    </div>
+    <div class="menu-foot">
+      <span id="record"></span>
+      <details class="menu-controls">
+        <summary>조작</summary>
+        <div class="howto">
+          <span><kbd>WASD</kbd> 이동</span><span><kbd>마우스</kbd> 조준</span><span><kbd>클릭</kbd> 사격</span><span><kbd>우클릭</kbd> 줌</span>
+          <span><kbd>Space</kbd> 점프</span><span><kbd>Shift</kbd> 달리기</span><span><kbd>Q</kbd> 스킬</span><span><kbd>V</kbd> 시점</span><span><kbd>R</kbd> 장전</span><span><kbd>1·2·3</kbd> 선택</span>
+        </div>
+      </details>
+      <button id="soundBtn" type="button" aria-pressed="true">소리 켜짐</button>
+    </div>
+  </div>
+</div>
+
+<div id="duel" hidden></div>
+<div id="pause" hidden><div>일시정지<small>화면을 클릭하면 계속</small></div></div>
+<div id="ending" hidden></div>
+
+<script src="js/data.js?v=20261111a"></script>
+<script src="js/content.js?v=20261111a"></script>
+<script src="js/engine.js?v=20261111a"></script>
+<script src="js/characters.js?v=20261111a"></script>
+<script src="js/world.js?v=20261111a"></script>
+<script src="assets/sfx/weapon-samples.js?v=20261111a"></script>
+<script src="js/audio.js?v=20261111a"></script>
+<script src="js/input.js?v=20261111a"></script>
+<script src="js/hud.js?v=20261111a"></script>
+<script src="js/actors.js?v=20261111a"></script>
+<script src="js/bosses.js?v=20261111a"></script>
+<script src="js/rules.js?v=20261111a"></script>
+<script src="js/voice.js?v=20261111a"></script>
+<script src="js/duel.js?v=20261111a"></script>
+<script src="js/net.js?v=20261111a"></script>
+<script src="js/pvp.js?v=20261111a"></script>
+<script src="js/range.js?v=20261111a"></script>
+<script src="js/lobby.js?v=20261111a"></script>
+<script src="js/draw.js?v=20261111a"></script>
+<script src="js/main.js?v=20261111a"></script>
+</body>
+</html>
